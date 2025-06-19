@@ -15,7 +15,6 @@ exports.login = async (req, res) => {
 
     // Check if admin exists
     const admin = await Admin.findOne({ email });
-    console.log("data", admin);
     if (!admin) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
