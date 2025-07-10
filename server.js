@@ -5,6 +5,7 @@ const cors = require("cors");
 const path = require("path");
 
 const AdminRoutes = require("./src/routes/AdminRoutes");
+const CategoryRoutes = require("./src/routes/CategoryRoutes");
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 
 // Define routes
 app.use("/admin", AdminRoutes);
+app.use("/category", CategoryRoutes);
 
 const PORT = process.env.PORT || 5000;
 
