@@ -17,8 +17,15 @@ const CategorySchema = new mongoose.Schema({
     type: String,
     enum: ["Active", "Disable"],
     default: "Active"
+  },
+  banner_img: {
+    type: String, 
+    default: null
+  },
+  mobile_banner_img: {
+    type: String,
+    default: null
   }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Category", CategorySchema);
-

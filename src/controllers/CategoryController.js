@@ -1,15 +1,12 @@
 const Category = require("../models/Category");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
 
 // Create a new category
 exports.add = async (req, res) => {
   try {
-    const { name, slug, status } = req.body;
+    const { name, slug, status, banner_img, mobile_banner_img } = req.body;
 
     // Validate required fields
-    if (!name || !slug ) {
+    if (!name || !slug) {
       return res.status(400).json({ message: "Invalid data provided" });
     }
 
@@ -18,8 +15,21 @@ exports.add = async (req, res) => {
     if (existing) {
       return res.status(409).json({ message: "Category with this slug already exists" });
     }
+       // Check if name already exists
+    const existingName = await Category.findOne({ name });
+    if (existingName) {
+      return res.status(409).json({ message: "Category with this name already exists" });
+    }
 
-    const category = new Category({ name, slug, status });
+
+    const category = new Category({
+      name,
+      slug,
+      status,
+      banner_img: banner_img || null,           // optional
+      mobile_banner_img: mobile_banner_img || null  // optional
+    });
+
     await category.save();
 
     res.status(201).json({ message: "Category created successfully", category });
@@ -40,6 +50,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
+// Get a single category by slug
 exports.get = async (req, res) => {
   try {
     const category = await Category.findOne({ slug: req.params.slug });
@@ -55,15 +66,32 @@ exports.get = async (req, res) => {
 // Update category
 exports.update = async (req, res) => {
   try {
-    const { name, slug, status } = req.body;
+    const { name, slug, status, banner_img, mobile_banner_img } = req.body;
 
     if (!name || !slug || !["Active", "Disable"].includes(status)) {
       return res.status(400).json({ message: "Invalid data provided" });
     }
 
+    // Check if a different category already uses this slug
+    const existingCategory = await Category.findOne({ slug });
+
+    if (existingCategory && existingCategory.slug !== req.params.slug) {
+      return res.status(409).json({ message: "Slug already exists" });
+    }
+
+    // Prepare updated fields (conditionally include banner images)
+    const updateFields = {
+      name,
+      slug,
+      status
+    };
+
+    if (banner_img !== undefined) updateFields.banner_img = banner_img;
+    if (mobile_banner_img !== undefined) updateFields.mobile_banner_img = mobile_banner_img;
+
     const updatedCategory = await Category.findOneAndUpdate(
       { slug: req.params.slug },
-      { name, slug, status },
+      updateFields,
       { new: true }
     );
 
@@ -77,7 +105,6 @@ exports.update = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 // Delete category
 exports.delete = async (req, res) => {
@@ -94,4 +121,3 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
