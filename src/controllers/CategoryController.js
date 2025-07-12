@@ -64,47 +64,58 @@ exports.get = async (req, res) => {
 };
 
 // Update category
-exports.update = async (req, res) => {
+exports.updateCategory = async (req, res) => {
   try {
     const { name, slug, status, banner_img, mobile_banner_img } = req.body;
+    const currentSlug = req.params.slug;
 
-    if (!name || !slug || !["Active", "Disable"].includes(status)) {
-      return res.status(400).json({ message: "Invalid data provided" });
+    // Fetch current category
+    const category = await Category.findOne({ slug: currentSlug });
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
     }
 
-    // Check if a different category already uses this slug
-    const existingCategory = await Category.findOne({ slug });
+    const updateFields = {};
 
-    if (existingCategory && existingCategory.slug !== req.params.slug) {
-      return res.status(409).json({ message: "Slug already exists" });
+    // ✅ Validate and assign only if provided
+    if (name !== undefined) updateFields.name = name;
+    if (slug !== undefined) {
+      if (slug !== currentSlug) {
+        const existing = await Category.findOne({ slug });
+        if (existing) {
+          return res.status(409).json({ message: 'Slug already exists' });
+        }
+      }
+      updateFields.slug = slug;
     }
 
-    // Prepare updated fields (conditionally include banner images)
-    const updateFields = {
-      name,
-      slug,
-      status
-    };
+    if (status !== undefined) {
+      if (!["Active", "Disable"].includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+      }
+      updateFields.status = status;
+    }
 
     if (banner_img !== undefined) updateFields.banner_img = banner_img;
     if (mobile_banner_img !== undefined) updateFields.mobile_banner_img = mobile_banner_img;
 
     const updatedCategory = await Category.findOneAndUpdate(
-      { slug: req.params.slug },
-      updateFields,
+      { slug: currentSlug },
+      { $set: updateFields },
       { new: true }
     );
 
-    if (!updatedCategory) {
-      return res.status(404).json({ message: "Category not found" });
-    }
+    res.status(200).json({
+      message: 'Category updated successfully',
+      category: updatedCategory
+    });
 
-    res.status(200).json({ message: "Category updated", category: updatedCategory });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Update category error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 // Delete category
 exports.delete = async (req, res) => {
