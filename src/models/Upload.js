@@ -8,4 +8,4 @@ const uploadSchema = new mongoose.Schema({
   publicId: { type: String, required: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Image', uploadSchema);
+module.exports = mongoose.model('upload', uploadSchema);
