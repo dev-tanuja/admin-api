@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const mongoose = require('mongoose');
 
 // Create a new category
 exports.add = async (req, res) => {
