@@ -26,9 +26,15 @@ exports.add = async (req, res) => {
       name,
       slug,
       status,
-      banner_img: banner_img || null,           // optional
-      mobile_banner_img: mobile_banner_img || null  // optional
     });
+
+    if (banner_img && mongoose.Types.ObjectId.isValid(banner_img)) {
+      category.banner_img = banner_img;
+    }
+
+    if (mobile_banner_img && mongoose.Types.ObjectId.isValid(mobile_banner_img)) {
+      category.mobile_banner_img = mobile_banner_img;
+    }
 
     await category.save();
 
@@ -42,8 +48,16 @@ exports.add = async (req, res) => {
 // Get all categories
 exports.getAll = async (req, res) => {
   try {
-    const categories = await Category.find().sort({ createdAt: -1 }); // newest first
-    res.status(200).json(categories);
+    const categories = await Category.find()
+      .populate('banner_img', 'url alt') 
+      .populate('mobile_banner_img', 'url alt')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: categories.length,
+      data: categories
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -53,10 +67,16 @@ exports.getAll = async (req, res) => {
 // Get a single category by slug
 exports.get = async (req, res) => {
   try {
-    const category = await Category.findOne({ slug: req.params.slug });
-    if (!category) return res.status(404).json({ message: "Category not found" });
+    const category = await Category.findOne({ slug: req.params.slug })
+      .populate('banner_img', 'url alt') // 👈 select only needed fields
+      .populate('mobile_banner_img', 'url alt');
 
-    res.status(200).json(category);
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    res.status(200).json({ success: true, data: category });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
