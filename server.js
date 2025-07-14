@@ -7,6 +7,9 @@ const cors = require("cors");
 const AdminRoutes = require("./src/routes/AdminRoutes");
 const CategoryRoutes = require("./src/routes/CategoryRoutes");
 const UploadRoutes = require("./src/routes/UploadRoutes");
+const LocationRoutes = require('./src/routes/LocationRoutes');
+const FaqRoutes = require('./src/routes/FaqRoutes');
+
 
 const app = express();
 
@@ -16,6 +19,8 @@ app.use(cors());
 app.use("/admin", AdminRoutes);
 app.use("/category", CategoryRoutes);
 app.use("/images", UploadRoutes);
+app.use("/location", LocationRoutes);
+app.use("/faqs", FaqRoutes);
 
 const PORT = process.env.PORT || 5000;
 
