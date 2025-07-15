@@ -2,65 +2,6 @@ const Upload = require('../models/Upload');
 const cloudinary = require('../utils/cloudinary');
 
 
-exports.uploadImage = async (req, res) => {
-  try {
-    if (!req.file || !req.file.path) {
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
-    const { title, alt } = req.body;
-    const newImage = new Upload({
-      name: req.file.originalname,
-      title: title || '',
-      alt: alt || '',
-      url: req.file.path,
-      publicId: req.file.filename
-    });
-
-    const savedImage = await newImage.save();
-    res.status(201).json({
-      message: 'Image uploaded successfully',
-      image: savedImage
-    });
-  } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({
-      message: 'Image upload failed',
-      error: error.message || 'Unknown server error'
-    });
-  }
-};
-
-exports.uploadMultipleImages = async (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: 'No files uploaded' });
-    }
-
-    const { title, alt } = req.body;
-
-    const imagesData = req.files.map(file => ({
-      name: file.originalname,
-      title: title || '',
-      alt: alt || '',
-      url: file.path,
-      publicId: file.filename
-    }));
-
-    const savedImages = await Upload.insertMany(imagesData);
-
-    res.status(201).json({
-      message: 'Images uploaded successfully',
-      images: savedImages
-    });
-
-  } catch (error) {
-    console.error('Multiple Upload error:', error);
-    res.status(500).json({
-      message: 'Image upload failed',
-      error: error.message || 'Unknown server error'
-    });
-  }
-};
 
 exports.uploadImages = async (req, res) => {
   try {
