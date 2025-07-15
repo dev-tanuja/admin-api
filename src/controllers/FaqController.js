@@ -87,3 +87,8 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+
+exports.activityGet = async (req, res) => {
+
+}

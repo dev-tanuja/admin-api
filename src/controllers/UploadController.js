@@ -30,6 +30,75 @@ exports.uploadImage = async (req, res) => {
   }
 };
 
+exports.uploadMultipleImages = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: 'No files uploaded' });
+    }
+
+    const { title, alt } = req.body;
+
+    const imagesData = req.files.map(file => ({
+      name: file.originalname,
+      title: title || '',
+      alt: alt || '',
+      url: file.path,
+      publicId: file.filename
+    }));
+
+    const savedImages = await Upload.insertMany(imagesData);
+
+    res.status(201).json({
+      message: 'Images uploaded successfully',
+      images: savedImages
+    });
+
+  } catch (error) {
+    console.error('Multiple Upload error:', error);
+    res.status(500).json({
+      message: 'Image upload failed',
+      error: error.message || 'Unknown server error'
+    });
+  }
+};
+
+exports.uploadImages = async (req, res) => {
+  try {
+    const { title, alt } = req.body;
+
+    // req.files will always be an array when using upload.any()
+    const files = req.files && req.files.length > 0
+      ? req.files
+      : [];
+
+    if (files.length === 0) {
+      return res.status(400).json({ message: 'No files uploaded' });
+    }
+
+    const imagesData = files.map(file => ({
+      name: file.originalname,
+      title: title || '',
+      alt: alt || '',
+      url: file.path,
+      publicId: file.filename
+    }));
+
+    const savedImages = await Upload.insertMany(imagesData);
+
+    res.status(201).json({
+      message: 'Images uploaded successfully',
+      images: savedImages
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: 'Image upload failed',
+      error: error.message || 'Unknown server error'
+    });
+  }
+};
+
+
 
 exports.getAllImages = async (req, res) => {
   try {

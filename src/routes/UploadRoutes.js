@@ -11,5 +11,8 @@ router.post('/upload', (req, res, next) => {
 router.get('/get', UploadController.getAllImages);
 router.delete('/delete/:id', UploadController.deleteImage);
 
+router.post('/upload', upload.any(), UploadController.uploadImages);
+
+
 
 module.exports = router;

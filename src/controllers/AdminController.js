@@ -48,3 +48,44 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword, repeatPassword } = req.body;
+    const userId = req.user.adminId;  // Assuming this is set after authentication
+
+    // Validate required fields
+    if (!currentPassword || !newPassword || !repeatPassword) {
+      return res.status(400).json({ message: 'Current, new, and repeat passwords are required.' });
+    }
+
+    if (newPassword !== repeatPassword) {
+      return res.status(400).json({ message: 'New password and repeat password do not match.' });
+    }
+
+    const user = await Admin.findById(userId).select('+password');
+    if (!user) {
+      return res.status(404).json({ message: 'Admin user not found.' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect.' });
+    }
+
+    user.password = newPassword; // Hashing handled by pre-save middleware
+    await user.save();
+
+    res.status(200).json({ message: 'Password changed successfully.' });
+
+  } catch (error) {
+    console.error('Password change error:', error);
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  }
+};
+
+
+
+
+

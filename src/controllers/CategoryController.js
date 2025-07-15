@@ -27,6 +27,8 @@ exports.add = async (req, res) => {
       name,
       slug,
       status,
+      meta_details: meta_details || {},
+      og_details: og_details || {}
     });
 
     if (banner_img && mongoose.Types.ObjectId.isValid(banner_img)) {
@@ -119,6 +121,8 @@ exports.updateCategory = async (req, res) => {
 
     if (banner_img !== undefined) updateFields.banner_img = banner_img;
     if (mobile_banner_img !== undefined) updateFields.mobile_banner_img = mobile_banner_img;
+    if (meta_details) { category.meta_details = meta_details;}
+    if (og_details) { category.og_details = og_details;}
 
     const updatedCategory = await Category.findOneAndUpdate(
       { slug: currentSlug },
