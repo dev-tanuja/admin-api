@@ -5,7 +5,7 @@ const cloudinary = require('../utils/cloudinary');
 
 exports.uploadImages = async (req, res) => {
   try {
-    const { title = [], alt = [] } = req.body;
+    const { alt = [] } = req.body;
 
     const files = req.files && req.files.length > 0 ? req.files : [];
 
@@ -15,8 +15,8 @@ exports.uploadImages = async (req, res) => {
 
     const imagesData = files.map((file, index) => ({
       name: file.originalname,
-      title: Array.isArray(title) ? (title[index] || '') : (title || ''),
-      alt: Array.isArray(alt) ? (alt[index] || '') : (alt || ''),
+      title: '', // You can extend this if needed
+      alt: Array.isArray(alt) ? (alt[index] || '') : '',
       url: file.path,
       publicId: file.filename
     }));
