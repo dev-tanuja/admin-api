@@ -5,7 +5,7 @@ const cloudinary = require('../utils/cloudinary');
 
 exports.uploadImages = async (req, res) => {
   try {
-    const { alt = [] } = req.body;
+    const metaArray = JSON.parse(req.body.meta || '[]');  
 
     const files = req.files && req.files.length > 0 ? req.files : [];
 
@@ -13,13 +13,20 @@ exports.uploadImages = async (req, res) => {
       return res.status(400).json({ message: 'No files uploaded' });
     }
 
-    const imagesData = files.map((file, index) => ({
-      name: file.originalname,
-      title: '', // You can extend this if needed
-      alt: Array.isArray(alt) ? (alt[index] || '') : '',
-      url: file.path,
-      publicId: file.filename
-    }));
+    if (metaArray.length !== files.length) {
+      return res.status(400).json({ message: 'Mismatch between images and metadata.' });
+    }
+
+    const imagesData = files.map((file, index) => {
+      const meta = metaArray[index] || {};
+      return {
+        name: file.originalname,
+        title: meta.title || '',
+        alt: meta.alt || '',
+        url: file.path,
+        publicId: file.filename
+      };
+    });
 
     const savedImages = await Upload.insertMany(imagesData);
 
