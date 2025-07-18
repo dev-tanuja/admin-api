@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CategorySchema = new mongoose.Schema({
+const ActivityTicket = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -13,11 +13,7 @@ const CategorySchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
-  status: {
-    type: String,
-    enum: ["Active", "Disable"],
-    default: "Active"
-  },
+ 
   banner_img: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'upload',
@@ -54,44 +50,45 @@ const CategorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'upload'
   }],
+  video_link :{
+    type : String
+  },
   highlights : {
-
     type: String,
   },
   cancellation_policy : {
+    type: String,
+
+  },
+  inclusions : {
         type: String,
 
   },
+  timing_info : {
+            type: String,
 
+  },
 
   price_variation: [{
     duration: { type: String, required: true },  // Example: "2 hours"
 
-    // Pricing broken down for adults & children
     prices: {
       adult_price: { type: Number, required: true },
       child_price: { type: Number },  // Optional if same as adult
       offer_adult_price: { type: Number },
-      offer_child_price: { type: Number }
+      offer_child_price: { type: Number },
+      infant_price: { type: Number },
+      offer_infant_price: { type: Number }
     },
 
     availability: { 
-      type: Number,  // e.g., 50 tickets available
-      required: true,
-      min: 0,
-      max : 6,
+      total: { type: Number, required: true },
+      booked: { type: Number, default: 0 },
+      max: { type: Number, default: 6 }
     },
-    // Time-slot based availability
-    time_slot: {
-      start_time: { type: String },  // Example: "14:00"
-      end_time: { type: String }     // Example: "16:00"
-    },
-
-    // Availability either daily or for a specific date
-    everyday: { type: Boolean, default: false },
-    dates: [{ type: Date }]  // multiple specific dates supported
+   
+    dates: [{ type: Date }]  
   }],
-
 
   location: {
     type: mongoose.Schema.Types.ObjectId,
@@ -100,8 +97,13 @@ const CategorySchema = new mongoose.Schema({
   pickup_location : {
     type: String,
   },
+  status: {
+    type: String,
+    enum: ["Active", "Disable"],
+    default: "Active"
+  },
 
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model("ActivityTicket", ActivityTicket);

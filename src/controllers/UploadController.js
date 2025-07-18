@@ -5,21 +5,18 @@ const cloudinary = require('../utils/cloudinary');
 
 exports.uploadImages = async (req, res) => {
   try {
-    const { title, alt } = req.body;
+    const { title = [], alt = [] } = req.body;
 
-    // req.files will always be an array when using upload.any()
-    const files = req.files && req.files.length > 0
-      ? req.files
-      : [];
+    const files = req.files && req.files.length > 0 ? req.files : [];
 
     if (files.length === 0) {
       return res.status(400).json({ message: 'No files uploaded' });
     }
 
-    const imagesData = files.map(file => ({
+    const imagesData = files.map((file, index) => ({
       name: file.originalname,
-      title: title || '',
-      alt: alt || '',
+      title: Array.isArray(title) ? (title[index] || '') : (title || ''),
+      alt: Array.isArray(alt) ? (alt[index] || '') : (alt || ''),
       url: file.path,
       publicId: file.filename
     }));
@@ -38,7 +35,6 @@ exports.uploadImages = async (req, res) => {
     });
   }
 };
-
 
 
 exports.getAllImages = async (req, res) => {
