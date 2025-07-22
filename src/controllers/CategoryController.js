@@ -26,9 +26,8 @@ exports.add = async (req, res) => {
     const category = new Category({
       name,
       slug,
-      status,
-      meta_details: meta_details || {},
-      og_details: og_details || {}
+      status
+      
     });
 
     if (banner_img && mongoose.Types.ObjectId.isValid(banner_img)) {

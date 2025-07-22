@@ -4,5 +4,7 @@ const ActivityTicketController = require("../controllers/ActivityTicketControlle
 const authMiddleware = require("../middlewares/authMiddleware");
 
 router.post("/add", ActivityTicketController.addTicket);
+router.get("/get", ActivityTicketController.getAllTicket);
+router.get("/get/:slug", ActivityTicketController.getTicketBySlug);
 
 module.exports = router;

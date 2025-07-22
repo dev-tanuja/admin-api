@@ -17,7 +17,9 @@ const SlotSchema = new mongoose.Schema({
         {
           startTime: { type: String, required: true },  
           endTime: { type: String, required: true },
-          capacity: { type: Number, required: true }
+          total: { type: Number, required: true },
+          booked: { type: Number, default: 0 },
+          max: { type: Number, default: 6 }
         }
       ]
     }

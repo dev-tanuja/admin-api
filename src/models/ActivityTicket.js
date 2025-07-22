@@ -24,6 +24,11 @@ const ActivityTicket = new mongoose.Schema({
     ref: 'upload',
     default: null
   },
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'category',
+    default: null
+  },
 
   short_description: {
     type: String,
@@ -82,7 +87,7 @@ const ActivityTicket = new mongoose.Schema({
     },
 
     availability: { 
-      total: { type: Number, required: true },
+      total: { type: Number },
       booked: { type: Number, default: 0 },
       max: { type: Number, default: 6 }
     },
@@ -102,6 +107,10 @@ const ActivityTicket = new mongoose.Schema({
     enum: ["Active", "Disable"],
     default: "Active"
   },
+  slot: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Slot'
+}
 
 
 }, { timestamps: true });
