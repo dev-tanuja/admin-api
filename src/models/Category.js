@@ -18,8 +18,8 @@ const CategorySchema = new mongoose.Schema({
     enum: ["Active", "Disable"],
     default: "Active"
   },
-  banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'upload' },
-  mobile_banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'upload' },
+  banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
+  mobile_banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
   meta_details: {
       meta_title: {
         type: String,
@@ -49,4 +49,4 @@ const CategorySchema = new mongoose.Schema({
 
 { timestamps: true });
 
-module.exports = mongoose.model("category", CategorySchema);
+module.exports = mongoose.model("Category", CategorySchema);

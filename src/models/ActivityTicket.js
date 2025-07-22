@@ -16,12 +16,12 @@ const ActivityTicket = new mongoose.Schema({
  
   banner_img: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'upload',
+    ref: 'Upload',
     default: null
   },
   mobile_banner_img: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'upload',
+    ref: 'Upload',
     default: null
   },
   categoryId: {
@@ -47,13 +47,13 @@ const ActivityTicket = new mongoose.Schema({
 
   featured_img: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'upload',
+    ref: 'Upload',
     default: null
   },
 
   gallery_images: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'upload'
+    ref: 'Upload'
   }],
   video_link :{
     type : String
@@ -97,7 +97,7 @@ const ActivityTicket = new mongoose.Schema({
 
   location: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'location'
+    ref: 'Location'
   },
   pickup_location : {
     type: String,

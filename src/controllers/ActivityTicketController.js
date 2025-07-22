@@ -104,7 +104,7 @@ exports.getTicketBySlug = async (req, res) => {
       .populate('featured_img')
       .populate('gallery_images')
       .populate('categoryId')
-      .populate('location');
+      .populate('Location');
       const slots = await Slot.find({ activityId: activity._id });
 
 
