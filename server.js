@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Admin API Failed 404");
+  res.send("Welcome to Admin API");
 });
 
 app.use("/admin", AdminRoutes);
