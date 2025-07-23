@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Admin API failed 111");
+  res.send("Admin API Failed 112");
 });
 
 app.use("/admin", AdminRoutes);
