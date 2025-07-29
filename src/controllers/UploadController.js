@@ -4,6 +4,7 @@ const { uploadFileToBunny, deleteFileFromBunny } = require('../utils/bunnyUpload
 exports.uploadImages = async (req, res) => {
   try {
     const metaArray = JSON.parse(req.body.meta || '[]');
+    const folder = req.body.folder || 'general'; 
     const files = req.files || [];
 
     if (!files.length) return res.status(400).json({ message: 'No files uploaded' });
@@ -14,15 +15,19 @@ exports.uploadImages = async (req, res) => {
     for (let i = 0; i < files.length; i++) {
       const meta = metaArray[i] || {};
       const file = files[i];
+      const filename = `${Date.now()}-${file.originalname}`;
 
-      const { url, path } = await uploadFileToBunny(file.buffer, file.originalname);
+      // Include folder in path
+      const fullPath = `${folder}/${filename}`;
+
+      const { url } = await uploadFileToBunny(file.buffer, fullPath);
 
       imagesData.push({
         name: file.originalname,
         title: meta.title || '',
         alt: meta.alt || '',
         url,
-        publicId: path // Use Bunny file path as identifier
+        publicId: fullPath // <- full path with folder
       });
     }
 
@@ -32,6 +37,7 @@ exports.uploadImages = async (req, res) => {
       message: 'Images uploaded successfully',
       images: savedImages
     });
+
   } catch (error) {
     res.status(500).json({
       message: 'Image upload failed',
