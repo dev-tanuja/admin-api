@@ -16,8 +16,7 @@ exports.uploadImages = async (req, res) => {
       const meta = metaArray[i] || {};
       const file = files[i];
       const filename = `${Date.now()}-${file.originalname}`;
-
-      const fullPath = `${folder}/${filename}`;
+      const fullPath = `${folder}/${filename}`; 
       const { url } = await uploadFileToBunny(file.buffer, fullPath); 
       imagesData.push({
         name: file.originalname,
