@@ -17,17 +17,14 @@ exports.uploadImages = async (req, res) => {
       const file = files[i];
       const filename = `${Date.now()}-${file.originalname}`;
 
-      // Include folder in path
       const fullPath = `${folder}/${filename}`;
-
-      const { url } = await uploadFileToBunny(file.buffer, fullPath);
-
+      const { url } = await uploadFileToBunny(file.buffer, fullPath); 
       imagesData.push({
         name: file.originalname,
         title: meta.title || '',
         alt: meta.alt || '',
-        url,
-        publicId: fullPath // <- full path with folder
+        url, 
+        publicId: fullPath
       });
     }
 

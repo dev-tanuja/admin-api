@@ -10,6 +10,7 @@ const UploadRoutes = require("./src/routes/UploadRoutes");
 const LocationRoutes = require("./src/routes/LocationRoutes");
 const FaqRoutes = require("./src/routes/FaqRoutes");
 const ActivityRoutes = require("./src/routes/ActivityRoutes");
+const UserRoutes = require("./src/routes/UserRoutes");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/images", UploadRoutes);
 app.use("/location", LocationRoutes);
 app.use("/faqs", FaqRoutes);
 app.use("/activity", ActivityRoutes);
+app.use("/users", UserRoutes);
 
 const PORT = process.env.PORT || 5050;
 
