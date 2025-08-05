@@ -31,19 +31,20 @@ exports.add = async (req, res) => {
       slug,
       status,
     })
+    
+    if (banner_img && mongoose.Types.ObjectId.isValid(banner_img._id)) {
+      category.banner_img = banner_img._id
+    }
 
-    if (banner_img && mongoose.Types.ObjectId.isValid(banner_img)) {
-      category.banner_img = banner_img
+    if (thumbnail && mongoose.Types.ObjectId.isValid(thumbnail._id)) {
+      category.thumbnail = thumbnail._id
     }
 
     if (
       mobile_banner_img &&
-      mongoose.Types.ObjectId.isValid(mobile_banner_img)
+      mongoose.Types.ObjectId.isValid(mobile_banner_img._id)
     ) {
-      category.mobile_banner_img = mobile_banner_img
-    }
-    if (thumbnail && mongoose.Types.ObjectId.isValid(thumbnail)) {
-      category.thumbnail = thumbnail
+      category.mobile_banner_img = mobile_banner_img._id
     }
 
     await category.save()
