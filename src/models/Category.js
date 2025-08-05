@@ -18,6 +18,7 @@ const CategorySchema = new mongoose.Schema({
     enum: ["Active", "Disable"],
     default: "Active"
   },
+  thumbnail: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
   banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
   mobile_banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
   meta_details: {
