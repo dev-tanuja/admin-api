@@ -4,7 +4,16 @@ const mongoose = require('mongoose')
 // Create a new category
 exports.add = async (req, res) => {
   try {
-    const { name, slug, status, banner_img, mobile_banner_img , thumbnail} = req.body
+    const {
+      name,
+      slug,
+      status,
+      banner_img,
+      mobile_banner_img,
+      thumbnail,
+      og_details,
+      meta_details,
+    } = req.body
 
     // Validate required fields
     if (!name || !slug) {
@@ -31,7 +40,7 @@ exports.add = async (req, res) => {
       slug,
       status,
     })
-    
+
     if (banner_img && mongoose.Types.ObjectId.isValid(banner_img._id)) {
       category.banner_img = banner_img._id
     }
@@ -45,6 +54,13 @@ exports.add = async (req, res) => {
       mongoose.Types.ObjectId.isValid(mobile_banner_img._id)
     ) {
       category.mobile_banner_img = mobile_banner_img._id
+    }
+
+    if (meta_details) {
+      category.meta_details = meta_details
+    }
+    if (og_details) {
+      category.og_details = og_details
     }
 
     await category.save()
@@ -98,7 +114,16 @@ exports.get = async (req, res) => {
 // Update category
 exports.updateCategory = async (req, res) => {
   try {
-    const { name, slug, status, banner_img, mobile_banner_img } = req.body
+    const {
+      name,
+      slug,
+      status,
+      banner_img,
+      mobile_banner_img,
+      thumbnail,
+      meta_details,
+      og_details,
+    } = req.body
     const currentSlug = req.params.slug
 
     // Fetch current category
