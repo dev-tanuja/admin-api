@@ -11,12 +11,8 @@ const HomeBannerSchema = new mongoose.Schema(
           ref: 'Category',
           required: true,
         },
-        video: {
-          type: String, 
-        },
-        banner_img: {
-          type: String, 
-        },
+        video: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
+        banner_img: { type: mongoose.Schema.Types.ObjectId, ref: 'Upload' },
         title: {
           type: String,
         },
