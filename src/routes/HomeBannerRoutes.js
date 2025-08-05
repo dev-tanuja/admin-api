@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const homeBannerController = require('../controllers/homeBannerController')
+const HomeBannerController = require('../src/controllers/HomeBannerController')
 
-router.post('/add', homeBannerController.createHomeBanner)
-router.get('/get', homeBannerController.getAllHomeBanners)
-router.patch('/update/:slug', homeBannerController.updateHomeBanner)
+router.post('/add', HomeBannerController.createHomeBanner)
+router.get('/get', HomeBannerController.getAllHomeBanners)
+router.patch('/update/:slug', HomeBannerController.updateHomeBanner)
 
 module.exports = router

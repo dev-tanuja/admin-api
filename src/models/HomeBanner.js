@@ -14,6 +14,9 @@ const HomeBannerSchema = new mongoose.Schema(
         video: {
           type: String, 
         },
+        banner_img: {
+          type: String, 
+        },
         title: {
           type: String,
         },
