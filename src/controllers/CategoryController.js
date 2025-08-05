@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 // Create a new category
 exports.add = async (req, res) => {
   try {
-    const { name, slug, status, banner_img, mobile_banner_img } = req.body
+    const { name, slug, status, banner_img, mobile_banner_img , thumbnail} = req.body
 
     // Validate required fields
     if (!name || !slug) {
