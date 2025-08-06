@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const FaqSchema = new mongoose.Schema({
-  activityId: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'ActivityTicket',
+    ref: 'Category',
     required: true
   },
   question: {
