@@ -1,128 +1,128 @@
-const ActivityTicket = require("../models/ActivityTicket");
-const Slot = require("../models/Slot");
+const ActivityTicket = require('../models/ActivityTicket')
+const mongoose = require('mongoose')
 
 exports.addTicket = async (req, res) => {
   try {
     const {
-      name,
+      title,
       slug,
-      categoryId,
-      banner_img,
-      mobile_banner_img,
       short_description,
-      description,
-      additional_information,
+      categoryId,
+      locationId,
       featured_img,
-      gallery_images,
-      highlights,
-      cancellation_policy,
-      inclusions,
-      timing_info,
-      price_variation,
-      location,
-      pickup_location,
-      video_link,
-      status,
-      slots
-    } = req.body;
+      youtube_video_link,
+      video,
+      map_link,
+      gallery,
+      banner_img,
+      review_count,
+      widget,
+      meta_details,
+      og_details
+    } = req.body
 
     const activityTicket = new ActivityTicket({
-      name,
+      title,
       slug,
-      categoryId,
-      banner_img,
-      mobile_banner_img,
       short_description,
-      description,
-      additional_information,
-      featured_img,
-      gallery_images,
-      highlights,
-      cancellation_policy,
-      inclusions,
-      timing_info,
-      price_variation,
-      location,
-      pickup_location,
-      video_link,
-      status
-    });
+      youtube_video_link,
+      map_link,
+      review_count,
+      widget
+    })
 
-    const savedTicket = await activityTicket.save();
-
-    if (slots) {
-      const slotData = new Slot({
-        activityId: savedTicket._id,
-        defaultSlots: slots.defaultSlots,
-        customOverrides: slots.customOverrides
-      });
-
-      await slotData.save();
+    if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
+      activityTicket.categoryId = categoryId
     }
 
+    if (locationId && mongoose.Types.ObjectId.isValid(locationId)) {
+      activityTicket.locationId = locationId
+    }
+
+    if (video && mongoose.Types.ObjectId.isValid(video._id)) {
+      activityTicket.video = video._id
+    }
+
+    if (featured_img && mongoose.Types.ObjectId.isValid(featured_img._id)) {
+      activityTicket.featured_img = featured_img._id
+    }
+
+    if (banner_img && mongoose.Types.ObjectId.isValid(banner_img._id)) {
+      activityTicket.banner_img = banner_img._id
+    }
+
+    if (Array.isArray(gallery)) {
+      activityTicket.gallery = gallery
+        .filter((img) => img && mongoose.Types.ObjectId.isValid(img._id))
+        .map((img) => img._id)
+    }
+
+    if (meta_details && typeof meta_details === 'object') {
+      activityTicket.meta_details = meta_details
+    }
+
+    if (og_details && typeof og_details === 'object') {
+      activityTicket.og_details = og_details
+    }
+
+    const savedTicket = await activityTicket.save()
+
     res.status(201).json({
-      message: "Activity ticket created successfully",
+      message: 'Activity ticket created successfully',
       activityTicket: savedTicket
-    });
-
+    })
   } catch (error) {
-    console.error("Create ticket error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error('Create ticket error:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
   }
-};
+}
 
-
-exports.getAllTicket = async (req, res) => { 
-
+exports.getAllTicket = async (req, res) => {
   try {
-    const activities = await ActivityTicket.find({}, 'name featured_img categoryId slug short_description banner_img')
-                            .populate('banner_img', 'url alt')                 // populate from Upload collection
-                            .populate('featured_img', 'url alt')
-                            .populate('categoryId', 'name slug');
+    const activities = await ActivityTicket.find(
+      {},
+      'name featured_img categoryId slug short_description banner_img'
+    )
+      .populate('banner_img', 'url alt')
+      .populate('featured_img', 'url alt')
+      .populate('categoryId', 'name slug')
 
     res.status(200).json({
       success: true,
       count: activities.length,
       data: activities
-    });
-
+    })
   } catch (error) {
-    console.error('Error fetching activities:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Error fetching activities:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
   }
-
-
 }
 
 exports.getTicketBySlug = async (req, res) => {
   try {
-    const { slug } = req.params;
-
-    const activity = await ActivityTicket.findOne({ slug })
-      .populate('banner_img')
-      .populate('mobile_banner_img')
-      .populate('featured_img')
-      .populate('gallery_images')
-      .populate('categoryId')
-      .populate('Location');
-      const slots = await Slot.find({ activityId: activity._id });
-
-
-    if (!activity) {
-      return res.status(404).json({ message: 'Activity not found' });
+    const { slug } = req.params
+    const ticket = await ActivityTicket.findOne({ slug })
+      .populate('categoryId', '_id name slug')
+      .populate('locationId', '_id name slug')
+      .populate('featured_img', 'url')
+      .populate('banner_img', 'url')
+      .populate('video', 'url')
+      .populate({
+        path: 'gallery',
+        select: 'url'
+      })
+    if (!ticket) {
+      return res.status(404).json({ message: 'Activity not found' })
     }
 
     res.status(200).json({
       success: true,
       data: {
-        ...activity.toObject(),  
-        slots                    
+        ...ticket.toObject()
       }
-    });
-
+    })
   } catch (error) {
-    console.error('Error fetching activity by slug:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Error fetching activity by slug:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
   }
-};
-
+}
