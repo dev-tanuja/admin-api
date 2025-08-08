@@ -123,3 +123,80 @@ exports.getTicketBySlug = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
+
+exports.updateTicket = async (req, res) => {
+  try {
+    const { slug } = req.params
+    const {
+      title,
+      short_description,
+      categoryId,
+      locationId,
+      featured_img,
+      youtube_video_link,
+      video,
+      map_link,
+      gallery,
+      banner_img,
+      widget,
+      meta_details,
+      og_details
+    } = req.body
+
+    const activityTicket = await ActivityTicket.findOne({ slug })
+    if (!activityTicket) {
+      return res.status(404).json({ message: 'Activity ticket not found' })
+    }
+
+    if (title) activityTicket.title = title
+    if (short_description) activityTicket.short_description = short_description
+    if (youtube_video_link)
+      activityTicket.youtube_video_link = youtube_video_link
+    if (map_link) activityTicket.map_link = map_link
+    if (widget) activityTicket.widget = widget
+
+    if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
+      activityTicket.categoryId = categoryId
+    }
+
+    if (locationId && mongoose.Types.ObjectId.isValid(locationId)) {
+      activityTicket.locationId = locationId
+    }
+
+    if (video && mongoose.Types.ObjectId.isValid(video._id)) {
+      activityTicket.video = video._id
+    }
+
+    if (featured_img && mongoose.Types.ObjectId.isValid(featured_img._id)) {
+      activityTicket.featured_img = featured_img._id
+    }
+
+    if (banner_img && mongoose.Types.ObjectId.isValid(banner_img._id)) {
+      activityTicket.banner_img = banner_img._id
+    }
+
+    if (Array.isArray(gallery)) {
+      activityTicket.gallery = gallery
+        .filter((img) => img && mongoose.Types.ObjectId.isValid(img._id))
+        .map((img) => img._id)
+    }
+
+    if (meta_details && typeof meta_details === 'object') {
+      activityTicket.meta_details = meta_details
+    }
+
+    if (og_details && typeof og_details === 'object') {
+      activityTicket.og_details = og_details
+    }
+
+    const updatedTicket = await activityTicket.save()
+
+    res.status(200).json({
+      message: 'Activity ticket updated successfully',
+      activityTicket: updatedTicket
+    })
+  } catch (error) {
+    console.error('Update ticket error:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}
