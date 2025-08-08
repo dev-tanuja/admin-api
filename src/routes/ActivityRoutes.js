@@ -6,6 +6,6 @@ const authMiddleware = require('../middlewares/authMiddleware')
 router.post('/add', ActivityTicketController.addTicket)
 router.get('/get', ActivityTicketController.getAllTicket)
 router.get('/get/:slug', ActivityTicketController.getTicketBySlug)
-router.patch('/update/:slug', updateTicket)
+router.patch('/update/:slug', ActivityTicketController.updateTicket)
 
 module.exports = router
