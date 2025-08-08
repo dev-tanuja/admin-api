@@ -38,8 +38,9 @@ const ActivityTicket = new mongoose.Schema(
     },
 
     video: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {}
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Upload',
+      default: null
     },
 
     map_link: {
