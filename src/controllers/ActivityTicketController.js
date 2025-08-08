@@ -79,11 +79,10 @@ exports.getAllTicket = async (req, res) => {
   try {
     const activities = await ActivityTicket.find(
       {},
-      'name featured_img categoryId slug short_description banner_img'
+      'title  categoryId slug short_description '
     )
-      .populate('banner_img', 'url alt')
-      .populate('featured_img', 'url alt')
       .populate('categoryId', 'name slug')
+      .populate('locationId', 'name slug')
 
     res.status(200).json({
       success: true,
