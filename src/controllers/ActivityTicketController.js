@@ -15,7 +15,6 @@ exports.addTicket = async (req, res) => {
       map_link,
       gallery,
       banner_img,
-      review_count,
       widget,
       meta_details,
       og_details
@@ -27,7 +26,6 @@ exports.addTicket = async (req, res) => {
       short_description,
       youtube_video_link,
       map_link,
-      review_count,
       widget
     })
 
