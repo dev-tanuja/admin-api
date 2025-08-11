@@ -12,6 +12,7 @@ const FaqRoutes = require('./src/routes/FaqRoutes')
 const ActivityRoutes = require('./src/routes/ActivityRoutes')
 const UserRoutes = require('./src/routes/UserRoutes')
 const HomeBannerRoutes = require('./src/routes/HomeBannerRoutes')
+const RatingRoutes = require('./src/routes/RatingRoutes')
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use('/faqs', FaqRoutes)
 app.use('/activity', ActivityRoutes)
 app.use('/users', UserRoutes)
 app.use('/section', HomeBannerRoutes)
+app.use('/ratings', RatingRoutes)
 
 const PORT = process.env.PORT || 5050
 
