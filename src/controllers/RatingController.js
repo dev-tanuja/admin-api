@@ -15,6 +15,8 @@ exports.listRatings = async (req, res) => {
         path: 'ticketId',
         select: 'title'
       })
+      .sort({ createdAt: -1 }) // sort by newest first
+
       .skip(skip)
       .limit(limit)
       .lean()
