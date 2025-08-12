@@ -3,18 +3,35 @@ const ActivityTicket = require('../models/ActivityTicket')
 
 exports.listRatings = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1
+    const limit = 10
+    const skip = (page - 1) * limit
+
+    const total = await Rating.countDocuments()
+
     const ratings = await Rating.find()
       .select('name email rating message ticketId')
       .populate({
         path: 'ticketId',
         select: 'title'
       })
+      .skip(skip)
+      .limit(limit)
       .lean()
 
-    res.status(200).json({ success: true, data: ratings })
+    res.status(200).json({
+      success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      count: ratings.length,
+      data: ratings
+    })
   } catch (error) {
     console.error('Error fetching ratings:', error)
-    res.status(500).json({ success: false, message: 'Server error' })
+    res
+      .status(500)
+      .json({ success: false, message: 'Server error', error: error.message })
   }
 }
 

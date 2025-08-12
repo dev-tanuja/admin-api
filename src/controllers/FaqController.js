@@ -32,8 +32,27 @@ exports.getAll = async (req, res) => {
       filter.categoryId = req.query.categoryId
     }
 
-    const faqs = await Faq.find(filter).sort({ createdAt: -1 })
-    res.status(200).json({ data: faqs })
+    // Pagination variables
+    const page = parseInt(req.query.page) || 1
+    const limit = 10
+    const skip = (page - 1) * limit
+
+    // Get total count based on filter
+    const total = await Faq.countDocuments(filter)
+
+    const faqs = await Faq.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+
+    res.status(200).json({
+      success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      count: faqs.length,
+      data: faqs
+    })
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message })
   }

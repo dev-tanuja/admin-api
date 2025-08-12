@@ -12,7 +12,6 @@ exports.addTicket = async (req, res) => {
       featured_img,
       youtube_video_link,
       video,
-      map_link,
       gallery,
       banner_img,
       widget,
@@ -77,15 +76,25 @@ exports.addTicket = async (req, res) => {
 
 exports.getAllTicket = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1
+    const limit = 10
+    const skip = (page - 1) * limit
+
+    const total = await ActivityTicket.countDocuments()
     const activities = await ActivityTicket.find(
       {},
       'title  categoryId slug short_description '
     )
       .populate('categoryId', 'name slug')
       .populate('locationId', 'name slug')
+      .skip(skip)
+      .limit(limit)
 
     res.status(200).json({
       success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
       count: activities.length,
       data: activities
     })
@@ -135,7 +144,6 @@ exports.updateTicket = async (req, res) => {
       featured_img,
       youtube_video_link,
       video,
-      map_link,
       gallery,
       banner_img,
       widget,
@@ -152,7 +160,6 @@ exports.updateTicket = async (req, res) => {
     if (short_description) activityTicket.short_description = short_description
     if (youtube_video_link)
       activityTicket.youtube_video_link = youtube_video_link
-    if (map_link) activityTicket.map_link = map_link
     if (widget) activityTicket.widget = widget
 
     if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {

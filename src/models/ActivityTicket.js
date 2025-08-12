@@ -43,11 +43,6 @@ const ActivityTicket = new mongoose.Schema(
       default: null
     },
 
-    map_link: {
-      type: String,
-      default: ''
-    },
-
     gallery: [
       {
         type: mongoose.Schema.Types.ObjectId,

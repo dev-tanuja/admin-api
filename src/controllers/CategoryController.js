@@ -12,7 +12,7 @@ exports.add = async (req, res) => {
       mobile_banner_img,
       thumbnail,
       og_details,
-      meta_details,
+      meta_details
     } = req.body
 
     // Validate required fields
@@ -38,7 +38,7 @@ exports.add = async (req, res) => {
     const category = new Category({
       name,
       slug,
-      status,
+      status
     })
 
     if (banner_img && mongoose.Types.ObjectId.isValid(banner_img._id)) {
@@ -72,23 +72,35 @@ exports.add = async (req, res) => {
   }
 }
 
-// Get all categories
+// Get all categories with pagination
 exports.getAll = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 10 // Allow dynamic limit
+    const skip = (page - 1) * limit
+
+    const total = await Category.countDocuments()
+
     const categories = await Category.find()
       .populate('banner_img', 'url alt')
       .populate('mobile_banner_img', 'url alt')
       .populate('thumbnail', 'url alt')
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
 
     res.status(200).json({
       success: true,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
       count: categories.length,
-      data: categories,
+      data: categories
     })
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Server error' })
+    console.error('Error fetching categories:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
 
@@ -122,7 +134,7 @@ exports.updateCategory = async (req, res) => {
       mobile_banner_img,
       thumbnail,
       meta_details,
-      og_details,
+      og_details
     } = req.body
     const currentSlug = req.params.slug
 
@@ -171,7 +183,7 @@ exports.updateCategory = async (req, res) => {
 
     res.status(200).json({
       message: 'Category updated successfully',
-      category: updatedCategory,
+      category: updatedCategory
     })
   } catch (error) {
     console.error('Update category error:', error)
@@ -183,7 +195,7 @@ exports.updateCategory = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const deletedCategory = await Category.findOneAndDelete({
-      slug: req.params.slug,
+      slug: req.params.slug
     })
 
     if (!deletedCategory) {
