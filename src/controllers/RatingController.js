@@ -10,7 +10,7 @@ exports.listRatings = async (req, res) => {
     const total = await Rating.countDocuments()
 
     const ratings = await Rating.find()
-      .select('name email rating message ticketId')
+      .select('name email rating message ticketId status')
       .populate({
         path: 'ticketId',
         select: 'title'
