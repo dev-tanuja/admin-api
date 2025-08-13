@@ -16,14 +16,12 @@ exports.createOrUpdateFeaturedTour = async (req, res) => {
         .json({ success: false, message: 'Max 12 tours allowed' })
     }
 
-    // Remove duplicate IDs in tours array
-    const uniqueTours = [...new Set(tours.map((id) => id.toString()))]
+    const uniqueTours = [...new Set(tours.map((t) => t._id.toString()))]
 
-    // Check if featured tour section with this slug already exists
     let featuredTour = await FeaturedTour.findOne({ slug })
 
     if (featuredTour) {
-      // Update existing
+      // Update existing section
       featuredTour.title = title
       featuredTour.tours = uniqueTours
       await featuredTour.save()
@@ -35,7 +33,6 @@ exports.createOrUpdateFeaturedTour = async (req, res) => {
       })
     }
 
-    // Create new if not found
     featuredTour = await FeaturedTour.create({
       title,
       slug,
