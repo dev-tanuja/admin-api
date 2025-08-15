@@ -14,6 +14,7 @@ const UserRoutes = require('./src/routes/UserRoutes')
 const HomeBannerRoutes = require('./src/routes/HomeBannerRoutes')
 const RatingRoutes = require('./src/routes/RatingRoutes')
 const FeaturedTourRoutes = require('./src/routes/FeaturedTourRoutes')
+const MetaRoutes = require('./src/routes/MetaRoutes')
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use('/users', UserRoutes)
 app.use('/section', HomeBannerRoutes)
 app.use('/ratings', RatingRoutes)
 app.use('/featured-tours', FeaturedTourRoutes)
+app.use('/meta', MetaRoutes)
 
 const PORT = process.env.PORT || 5050
 
