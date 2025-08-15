@@ -12,7 +12,7 @@ const MetaSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
-    order_no: { type: String, required: true, min: 1, max: 5, unique: true }
+    order_no: { type: Number, required: true, min: 1, max: 5, unique: true }
   },
   { timestamps: true }
 )
