@@ -24,7 +24,6 @@ exports.addTicket = async (req, res) => {
       slug,
       short_description,
       youtube_video_link,
-      map_link,
       widget
     })
 
