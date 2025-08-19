@@ -32,9 +32,8 @@ exports.getAll = async (req, res) => {
       filter.ticketId = req.query.ticketId
     }
 
-    // Pagination variables
     const page = parseInt(req.query.page) || 1
-    const limit = 10
+    const limit = parseInt(req.query.limit) || 10
     const skip = (page - 1) * limit
 
     // Get total count based on filter
@@ -48,6 +47,7 @@ exports.getAll = async (req, res) => {
     res.status(200).json({
       success: true,
       page,
+      limit,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
       count: faqs.length,
@@ -108,4 +108,3 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
-
