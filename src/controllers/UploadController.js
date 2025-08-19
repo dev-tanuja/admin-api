@@ -56,7 +56,13 @@ exports.getAllImages = async (req, res) => {
     limit = parseInt(limit)
 
     const skip = (page - 1) * limit
-    const images = await Upload.find().sort({ createdAt: -1 })
+    const images = await Upload.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+
+    // Get total count for pagination info
+    const total = await Upload.countDocuments()
     res.status(200).json({
       success: true,
       total,
