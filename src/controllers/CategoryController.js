@@ -6,6 +6,7 @@ exports.add = async (req, res) => {
   try {
     const {
       name,
+      sub_title,
       slug,
       status,
       banner_img,
@@ -37,6 +38,7 @@ exports.add = async (req, res) => {
 
     const category = new Category({
       name,
+      sub_title,
       slug,
       status
     })
@@ -128,6 +130,7 @@ exports.updateCategory = async (req, res) => {
   try {
     const {
       name,
+      sub_title,
       slug,
       status,
       banner_img,
@@ -147,6 +150,7 @@ exports.updateCategory = async (req, res) => {
     const updateFields = {}
 
     if (name !== undefined) updateFields.name = name
+    if (sub_title !== undefined) updateFields.sub_title = sub_title
     if (slug !== undefined) {
       if (slug !== currentSlug) {
         const existing = await Category.findOne({ slug })

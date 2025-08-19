@@ -3,19 +3,19 @@ const Faq = require('../models/Faq')
 // Create new FAQ
 exports.create = async (req, res) => {
   try {
-    const { categoryId, question, answer, status } = req.body
+    const { ticketId, question, answer, status } = req.body
 
-    if (!categoryId || !question || !answer) {
+    if (!ticketId || !question || !answer) {
       return res
         .status(400)
-        .json({ message: 'categoryId, question, and answer are required.' })
+        .json({ message: 'ticketId, question, and answer are required.' })
     }
 
     if (status && !['Active', 'Disable'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status value.' })
     }
 
-    const faq = new Faq({ categoryId, question, answer, status })
+    const faq = new Faq({ ticketId, question, answer, status })
     await faq.save()
 
     res.status(201).json({ message: 'FAQ created', data: faq })
@@ -24,12 +24,12 @@ exports.create = async (req, res) => {
   }
 }
 
-// Get all FAQs (optionally filter by categoryId)
+// Get all FAQs (optionally filter by ticketId)
 exports.getAll = async (req, res) => {
   try {
     const filter = {}
-    if (req.query.categoryId) {
-      filter.categoryId = req.query.categoryId
+    if (req.query.ticketId) {
+      filter.ticketId = req.query.ticketId
     }
 
     // Pagination variables
@@ -109,4 +109,3 @@ exports.delete = async (req, res) => {
   }
 }
 
-exports.activityGet = async (req, res) => {}

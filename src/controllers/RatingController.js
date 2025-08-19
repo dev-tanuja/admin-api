@@ -97,12 +97,13 @@ exports.updateRatingStatus = async (req, res) => {
           const avgRating =
             publishedRatings.reduce((acc, cur) => acc + cur.rating, 0) /
             publishedRatings.length
+          const roundedRating = Math.round(avgRating)
 
           await ActivityTicket.findByIdAndUpdate(ticketId, {
-            review_count: avgRating
+            review_count: roundedRating
           })
         } else {
-          await ActivityTicket.findByIdAndUpdate(ticketId, { avgRating: 0 })
+          await ActivityTicket.findByIdAndUpdate(ticketId, { review_count: 0 })
         }
       }
     }
