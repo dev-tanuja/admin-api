@@ -59,6 +59,10 @@ exports.getAllImages = async (req, res) => {
     const images = await Upload.find().sort({ createdAt: -1 })
     res.status(200).json({
       success: true,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
       count: images.length,
       data: images
     })
