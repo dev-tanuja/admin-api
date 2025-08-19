@@ -53,8 +53,8 @@ exports.getAllImages = async (req, res) => {
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 24
     const skip = (page - 1) * limit
-    const total = await Upload.countDocuments()
 
+    const total = await Upload.countDocuments()
     const images = await Upload.find()
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -63,8 +63,8 @@ exports.getAllImages = async (req, res) => {
     res.status(200).json({
       success: true,
       page,
-      limit,
       totalPages: Math.ceil(total / limit),
+      totalItems: total,
       count: images.length,
       data: images
     })
