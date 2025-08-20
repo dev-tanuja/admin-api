@@ -43,6 +43,7 @@ exports.getAll = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
+      .populate('ticketId', 'title slug') 
 
     res.status(200).json({
       success: true,

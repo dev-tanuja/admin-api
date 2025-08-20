@@ -38,7 +38,6 @@ app.use('/featured-tours', FeaturedTourRoutes)
 app.use('/meta', MetaRoutes)
 
 const PORT = process.env.PORT || 5050
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

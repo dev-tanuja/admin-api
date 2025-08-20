@@ -8,7 +8,7 @@ exports.createHomeBanner = async (req, res) => {
     if (!slug) {
       return res.status(400).json({
         success: false,
-        message: 'Slug is required',
+        message: 'Slug is required'
       })
     }
 
@@ -16,7 +16,7 @@ exports.createHomeBanner = async (req, res) => {
     if (existing) {
       return res.status(400).json({
         success: false,
-        message: 'Slug already exists',
+        message: 'Slug already exists'
       })
     }
 
@@ -48,30 +48,30 @@ exports.createHomeBanner = async (req, res) => {
 
     const banner = await HomeBanner.create({
       ...req.body,
-      category_section: validatedSections,
+      category_section: validatedSections
     })
 
     res.status(201).json({
       success: true,
       message: 'Home banner created successfully',
-      data: banner,
+      data: banner
     })
   } catch (error) {
     console.error('Create HomeBanner Error:', error)
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     })
   }
 }
 
 exports.getAllHomeBanners = async (req, res) => {
   try {
-    const banners = await HomeBanner.find().populate(
-      'category_section.categoryId',
-      'name slug'
-    )
+    const banners = await HomeBanner.find()
+      .populate('category_section.categoryId', 'name slug')
+      .populate('category_section.video', 'name slug url')
+      .populate('category_section.banner_img', 'name slug url')
 
     res.status(200).json({ success: true, data: banners })
   } catch (error) {
@@ -87,7 +87,7 @@ exports.updateHomeBanner = async (req, res) => {
     if (req.body.slug && req.body.slug !== slug) {
       return res.status(400).json({
         success: false,
-        message: 'Slug cannot be updated',
+        message: 'Slug cannot be updated'
       })
     }
 
@@ -135,20 +135,20 @@ exports.updateHomeBanner = async (req, res) => {
     if (!updatedBanner) {
       return res.status(404).json({
         success: false,
-        message: 'HomeBanner not found',
+        message: 'HomeBanner not found'
       })
     }
 
     res.status(200).json({
       success: true,
       message: 'HomeBanner updated successfully',
-      data: updatedBanner,
+      data: updatedBanner
     })
   } catch (error) {
     console.error('Update HomeBanner Error:', error)
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error.message
     })
   }
 }
