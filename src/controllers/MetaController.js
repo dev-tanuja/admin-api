@@ -28,20 +28,27 @@ exports.addMeta = async (req, res) => {
 
 exports.updateMeta = async (req, res) => {
   try {
-    const { order_no, name, widget } = req.body
+    const { id } = req.params
+    const { name, widget, order_no } = req.body
 
-    if (!order_no || !name || !widget) {
+    if (!name || !widget || !order_no) {
       return res.status(400).json({
         success: false,
-        message: 'order_no, name and widget are required'
+        message: 'name, widget and order_no are required'
       })
     }
 
-    const meta = await Meta.findOneAndUpdate(
-      { order_no },
-      { name, widget },
-      { new: true, upsert: true }
+    const meta = await Meta.findByIdAndUpdate(
+      id,
+      { name, widget, order_no },
+      { new: true, runValidators: true }
     )
+
+    if (!meta) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Meta post not found' })
+    }
 
     res.status(200).json({
       success: true,
@@ -50,12 +57,10 @@ exports.updateMeta = async (req, res) => {
     })
   } catch (error) {
     console.error('Error updating meta:', error)
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    })
+    res.status(500).json({ success: false, message: 'Server error' })
   }
 }
+
 
 exports.getAllMeta = async (req, res) => {
   try {
@@ -74,9 +79,8 @@ exports.getAllMeta = async (req, res) => {
 
 exports.getSingleMeta = async (req, res) => {
   try {
-    const name = req.params.name
-    const order_no = req.params.order_no
-    const meta = await Meta.findOne({ name, order_no }).lean()
+    const { id } = req.params
+    const meta = await Meta.findById(id).lean()
 
     if (!meta) {
       return res
@@ -93,10 +97,9 @@ exports.getSingleMeta = async (req, res) => {
 
 exports.deleteMeta = async (req, res) => {
   try {
-    const name = req.params.name
-    const order_no = req.params.order_no
+    const { id } = req.params
 
-    const deletedMeta = await Meta.findOneAndDelete({ name, order_no })
+    const deletedMeta = await Meta.findByIdAndDelete(id)
 
     if (!deletedMeta) {
       return res
@@ -114,3 +117,4 @@ exports.deleteMeta = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' })
   }
 }
+
