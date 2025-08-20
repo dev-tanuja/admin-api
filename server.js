@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('Welcome to Admin API')
+  res.send('Welcome to Admin MIR YAR KI DUNIA API')
 })
 
 app.use('/admin', AdminRoutes)
