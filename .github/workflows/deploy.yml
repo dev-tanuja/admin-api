@@ -31,4 +31,4 @@ jobs:
             cd admin-api
             git pull origin main
             npm install
-            pm2 restart admin-api || pm2 start npm --name admin-api -- run start
+            pm2 restart admin-api
