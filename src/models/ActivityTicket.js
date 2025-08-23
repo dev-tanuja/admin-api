@@ -36,6 +36,8 @@ const ActivityTicket = new mongoose.Schema(
       type: String,
       default: ''
     },
+    price: { type: Number, default: 0 },
+    offer_price: { type: Number, default: null },
 
     video: {
       type: mongoose.Schema.Types.ObjectId,
