@@ -4,7 +4,7 @@ exports.getAll = async (req, res) => {
   try {
     try {
       const page = parseInt(req.query.page) || 1
-      const limit = parseInt(req.query.limit) || 10 
+      const limit = parseInt(req.query.limit) || 10
       const skip = (page - 1) * limit
 
       const total = await Query.countDocuments()
@@ -32,5 +32,21 @@ exports.getAll = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: 'Server error', error: error.message })
+  }
+}
+
+// Get a single query by id
+exports.getSingle = async (req, res) => {
+  try {
+    const query = await Query.findOne({ _id: req.params.id })
+
+    if (!query) {
+      return res.status(404).json({ message: 'Category not found' })
+    }
+
+    res.status(200).json({ success: true, data: query })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
   }
 }

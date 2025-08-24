@@ -212,3 +212,19 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: 'Server error' })
   }
 }
+
+exports.dropdown = async (req, res) => {
+  try {
+    const categories = await Category.find()
+      .select('name slug')
+      .sort({ order_no: 1 })
+      .lean()
+    res.status(200).json({
+      success: true,
+      data: categories
+    })
+  } catch (error) {
+    console.error('Error fetching categories:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}

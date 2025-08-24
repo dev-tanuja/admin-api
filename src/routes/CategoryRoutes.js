@@ -1,11 +1,12 @@
-const express = require("express");
-const router = express.Router();
-const CategoryController = require("../controllers/CategoryController");
+const express = require('express')
+const router = express.Router()
+const CategoryController = require('../controllers/CategoryController')
 
-router.post("/add", CategoryController.add);
-router.get("/get", CategoryController.getAll);
-router.get("/get/:slug", CategoryController.get);
-router.patch('/update/:slug', CategoryController.updateCategory);
-router.delete("/delete/:slug", CategoryController.delete);
+router.post('/add', CategoryController.add)
+router.get('/get', CategoryController.getAll)
+router.get('/get/:slug', CategoryController.get)
+router.patch('/update/:slug', CategoryController.updateCategory)
+router.delete('/delete/:slug', CategoryController.delete)
+router.get('/dropdown', CategoryController.dropdown)
 
-module.exports = router;
+module.exports = router

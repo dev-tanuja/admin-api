@@ -1,11 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const LocationController = require('../controllers/LocationController');
+const express = require('express')
+const router = express.Router()
+const LocationController = require('../controllers/LocationController')
 
-router.post('/add', LocationController.create);
-router.get('/get', LocationController.getAll);
-router.get('/get/:slug', LocationController.get);
-router.patch('/update/:slug', LocationController.update);
-router.delete('/delete/:slug', LocationController.delete);
+router.post('/add', LocationController.create)
+router.get('/get', LocationController.getAll)
+router.get('/get/:slug', LocationController.get)
+router.patch('/update/:slug', LocationController.update)
+router.delete('/delete/:slug', LocationController.delete)
+router.get('/dropdown', LocationController.dropdown)
 
-module.exports = router;
+module.exports = router
