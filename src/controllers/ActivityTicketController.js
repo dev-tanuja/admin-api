@@ -230,3 +230,44 @@ exports.dropdown = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message })
   }
 }
+
+exports.searchTicket = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1
+    const limit = 10
+    const skip = (page - 1) * limit
+
+    const search = req.query.search || ''
+
+    let filter = {}
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: 'i' } },
+        { short_description: { $regex: search, $options: 'i' } }
+      ]
+    }
+
+    const total = await ActivityTicket.countDocuments(filter)
+
+    const activities = await ActivityTicket.find(
+      filter,
+      'title categoryId slug short_description'
+    )
+      .populate('categoryId', 'name slug')
+      .populate('locationId', 'name slug')
+      .skip(skip)
+      .limit(limit)
+
+    res.status(200).json({
+      success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      count: activities.length,
+      data: activities
+    })
+  } catch (error) {
+    console.error('Error fetching activities:', error)
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}

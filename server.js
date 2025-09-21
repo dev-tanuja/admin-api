@@ -16,6 +16,7 @@ const RatingRoutes = require('./src/routes/RatingRoutes')
 const FeaturedTourRoutes = require('./src/routes/FeaturedTourRoutes')
 const MetaRoutes = require('./src/routes/MetaRoutes')
 const QueryRoutes = require('./src/routes/QueryRoutes')
+const SubscriberRoutes = require('./src/routes/SubscriberRoutes')
 
 const app = express()
 
@@ -38,6 +39,7 @@ app.use('/ratings', RatingRoutes)
 app.use('/featured-tours', FeaturedTourRoutes)
 app.use('/meta', MetaRoutes)
 app.use('/queries', QueryRoutes)
+app.use('/subscribers', SubscriberRoutes)
 
 const PORT = process.env.PORT || 5050
 mongoose

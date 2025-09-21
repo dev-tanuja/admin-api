@@ -8,5 +8,6 @@ router.get('/get', ActivityTicketController.getAllTicket)
 router.get('/get/:slug', ActivityTicketController.getTicketBySlug)
 router.patch('/update/:slug', ActivityTicketController.updateTicket)
 router.get('/dropdown', ActivityTicketController.dropdown)
+router.get('/search', ActivityTicketController.searchTicket)
 
 module.exports = router
