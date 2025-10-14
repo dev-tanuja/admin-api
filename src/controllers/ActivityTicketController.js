@@ -83,7 +83,11 @@ exports.getAllTicket = async (req, res) => {
     const limit = 10
     const skip = (page - 1) * limit
 
-    const total = await ActivityTicket.countDocuments()
+    const search = req.query.search || ''
+
+    const filter = search ? { title: { $regex: search, $options: 'i' } } : {}
+
+    const total = await ActivityTicket.countDocuments(filter)
     const activities = await ActivityTicket.find(
       {},
       'title  categoryId slug short_description '
