@@ -5,6 +5,7 @@ exports.addTicket = async (req, res) => {
   try {
     const {
       title,
+      sub_title,
       slug,
       short_description,
       categoryId,
@@ -23,6 +24,7 @@ exports.addTicket = async (req, res) => {
 
     const activityTicket = new ActivityTicket({
       title,
+      sub_title,
       slug,
       short_description,
       youtube_video_link,
@@ -145,6 +147,7 @@ exports.updateTicket = async (req, res) => {
     const { slug } = req.params
     const {
       title,
+      sub_title,
       short_description,
       categoryId,
       locationId,
@@ -166,6 +169,7 @@ exports.updateTicket = async (req, res) => {
     }
 
     if (title) activityTicket.title = title
+    if (sub_title) activityTicket.sub_title = sub_title
     if (price) activityTicket.price = price
     if (offer_price) activityTicket.offer_price = offer_price
     if (short_description) activityTicket.short_description = short_description
