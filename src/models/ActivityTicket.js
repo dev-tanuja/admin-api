@@ -9,7 +9,6 @@ const ActivityTicket = new mongoose.Schema(
     },
     sub_title: {
       type: String,
-      required: true,
       trim: true
     },
     slug: { type: String, unique: true, trim: true },
