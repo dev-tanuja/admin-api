@@ -40,17 +40,26 @@ exports.addBlog = async (req, res) => {
 
 exports.getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find()
-      .populate('featured_img', 'url alt')
-      .populate('banner_img', 'url alt')
-      .populate('gallery', 'url alt')
-      .sort({ createdAt: -1 })
-      .lean()
+    const page = parseInt(req.query.page) || 1
+    const limit = 10
+    const skip = (page - 1) * limit
+
+    const search = req.query.search || ''
+
+    const filter = search ? { title: { $regex: search, $options: 'i' } } : {}
+
+    const total = await Blog.countDocuments(filter)
+    const blog = await Blog.find({}, 'title  slug featured_img')
+      .skip(skip)
+      .limit(limit)
 
     res.status(200).json({
       success: true,
-      count: blogs.length,
-      data: blogs
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      count: blog.length,
+      data: blog
     })
   } catch (error) {
     console.error('Get Blogs Error:', error)
