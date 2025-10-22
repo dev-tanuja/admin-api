@@ -6,5 +6,6 @@ router.post('/add', BlogController.addBlog)
 router.get('/get', BlogController.getAllBlogs)
 router.get('/get/:slug', BlogController.getSingleBlog)
 router.patch('/update/:slug', BlogController.updateBlog)
+router.delete('/delete/:slug', BlogController.delete)
 
 module.exports = router

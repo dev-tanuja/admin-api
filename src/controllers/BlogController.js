@@ -140,3 +140,20 @@ exports.updateBlog = async (req, res) => {
     })
   }
 }
+
+exports.delete = async (req, res) => {
+  try {
+    const deletedBlog = await Blog.findOneAndDelete({
+      slug: req.params.slug
+    })
+
+    if (!deletedBlog) {
+      return res.status(404).json({ message: 'Blog not found' })
+    }
+
+    res.status(200).json({ message: 'Blog deleted' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
