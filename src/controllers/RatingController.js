@@ -116,3 +116,15 @@ exports.updateRatingStatus = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' })
   }
 }
+
+exports.delete = async (req, res) => {
+  try {
+    const deletedRating = await Rating.findByIdAndDelete(req.params.id)
+    if (!deletedRating) {
+      return res.status(404).json({ message: 'Rating not found' })
+    }
+    res.status(200).json({ message: 'Rating deleted' })
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message })
+  }
+}

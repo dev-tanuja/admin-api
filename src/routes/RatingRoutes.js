@@ -5,5 +5,6 @@ const RatingController = require('../controllers/RatingController')
 router.get('/get', RatingController.listRatings)
 router.get('/get/:id', RatingController.getRating)
 router.patch('/update/:id', RatingController.updateRatingStatus)
+router.delete('/delete/:id', RatingController.delete)
 
 module.exports = router
