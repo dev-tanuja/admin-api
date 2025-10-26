@@ -10,7 +10,9 @@ exports.addBlog = async (req, res) => {
       title,
       slug,
       content,
-      faq
+      faq,
+      meta_details,
+      og_details
     })
 
     if (featured_img && mongoose.Types.ObjectId.isValid(featured_img)) {
@@ -23,6 +25,14 @@ exports.addBlog = async (req, res) => {
 
     if (Array.isArray(gallery)) {
       blog.gallery = gallery.filter((id) => mongoose.Types.ObjectId.isValid(id))
+    }
+
+    if (meta_details && typeof meta_details === 'object') {
+      blog.meta_details = meta_details
+    }
+
+    if (og_details && typeof og_details === 'object') {
+      blog.og_details = og_details
     }
 
     const savedBlog = await blog.save()
@@ -91,8 +101,17 @@ exports.getSingleBlog = async (req, res) => {
 exports.updateBlog = async (req, res) => {
   try {
     const { slug: currentSlug } = req.params
-    const { title, slug, featured_img, banner_img, content, gallery, faq } =
-      req.body
+    const {
+      title,
+      slug,
+      featured_img,
+      banner_img,
+      content,
+      gallery,
+      faq,
+      meta_details,
+      og_details
+    } = req.body
 
     const blog = await Blog.findOne({ slug: currentSlug })
     if (!blog) {
@@ -123,6 +142,13 @@ exports.updateBlog = async (req, res) => {
     if (Array.isArray(content)) blog.content = content
     if (Array.isArray(gallery)) blog.gallery = gallery
     if (Array.isArray(faq)) blog.faq = faq
+    if (meta_details && typeof meta_details === 'object') {
+      blog.meta_details = meta_details
+    }
+
+    if (og_details && typeof og_details === 'object') {
+      blog.og_details = og_details
+    }
 
     const updatedBlog = await blog.save()
 
