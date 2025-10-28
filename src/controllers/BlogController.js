@@ -15,6 +15,14 @@ exports.addBlog = async (req, res) => {
       og_details
     } = req.body
 
+    const existingBlog = await Blog.findOne({ slug })
+    if (existingBlog) {
+      return res.status(400).json({
+        success: false,
+        message: 'Slug must be unique. A blog with this slug already exists.'
+      })
+    }
+
     const blog = new Blog({
       title,
       slug,
