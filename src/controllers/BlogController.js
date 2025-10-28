@@ -11,7 +11,8 @@ exports.addBlog = async (req, res) => {
       content,
       gallery,
       faq,
-      meta_details
+      meta_details,
+      og_details
     } = req.body
 
     const blog = new Blog({
