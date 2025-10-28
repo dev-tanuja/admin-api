@@ -3,8 +3,16 @@ const mongoose = require('mongoose')
 
 exports.addBlog = async (req, res) => {
   try {
-    const { title, slug, featured_img, banner_img, content, gallery, faq } =
-      req.body
+    const {
+      title,
+      slug,
+      featured_img,
+      banner_img,
+      content,
+      gallery,
+      faq,
+      meta_details
+    } = req.body
 
     const blog = new Blog({
       title,
