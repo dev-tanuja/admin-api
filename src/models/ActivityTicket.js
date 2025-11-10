@@ -71,6 +71,11 @@ const ActivityTicket = new mongoose.Schema(
       default: ''
     },
 
+    special: {
+      type: Number,
+      default: 0
+    },
+
     meta_details: {
       meta_title: {
         type: String,

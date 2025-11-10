@@ -19,7 +19,8 @@ exports.addTicket = async (req, res) => {
       meta_details,
       og_details,
       price,
-      offer_price
+      offer_price,
+      special
     } = req.body
 
     const activityTicket = new ActivityTicket({
@@ -30,7 +31,8 @@ exports.addTicket = async (req, res) => {
       youtube_video_link,
       widget,
       price,
-      offer_price
+      offer_price,
+      special
     })
 
     if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
@@ -158,6 +160,7 @@ exports.updateTicket = async (req, res) => {
       banner_img,
       widget,
       price,
+      special,
       offer_price,
       meta_details,
       og_details
@@ -172,6 +175,7 @@ exports.updateTicket = async (req, res) => {
     if (sub_title) activityTicket.sub_title = sub_title
     if (price) activityTicket.price = price
     if (offer_price) activityTicket.offer_price = offer_price
+    if (special) activityTicket.special = special
     if (short_description) activityTicket.short_description = short_description
     if (youtube_video_link)
       activityTicket.youtube_video_link = youtube_video_link
