@@ -10,11 +10,11 @@ exports.createOrUpdateFeaturedTour = async (req, res) => {
         .json({ success: false, message: 'Tours must be an array' })
     }
 
-    if (tours.length > 12) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Max 12 tours allowed' })
-    }
+    // if (tours.length > 12) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: 'Max 12 tours allowed' })
+    // }
 
     const uniqueTours = [...new Set(tours.map((t) => t._id.toString()))]
 
